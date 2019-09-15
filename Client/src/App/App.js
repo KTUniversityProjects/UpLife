@@ -1,10 +1,24 @@
-import React from "react";
-const App = () => {
-  return (
-    <div>
-      <h1>Veryga is a Reptilian</h1>
-    </div>
-  );
-};
+import React, { Component } from "react";
+import axios from "axios";
 
-export default App;
+export default class extends Component {
+  state = {
+    getResponse: null,
+    putResponse: null,
+    deleteResponse: null,
+    updateResponse: null
+  };
+
+  makeRequest = req => {
+    console.log(req);
+    //axios.post('http://localhost:3001/api/' + req)
+  };
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.makeRequest("get")}>GET</button>
+      </div>
+    );
+  }
+}
