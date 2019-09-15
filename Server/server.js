@@ -27,21 +27,33 @@ app.use(logger("dev"));
 
 //GET
 router.get("/get", (req, res) => {
+  console.log("================================");
+  console.log("RECEIVED GET REQUEST");
+  console.log("================================");
   return res.json({ data: "GET request" });
 });
 
 //UPDATE
-router.post("/update", (req, res) => {
-  return res.json({ data: "UPDATE request" });
+router.post("/post", (req, res) => {
+  console.log("================================");
+  console.log(req.body.message);
+  console.log("================================");
+  return res.json({ data: "POST request" });
 });
 
 //DELETE
-router.delete("/delete", (req, res) => {
+router.delete("/delete/:body", (req, res) => {
+  console.log("================================");
+  console.log(req.params.body);
+  console.log("================================");
   return res.json({ data: "DELETE request" });
 });
 
 //CREATE
 router.post("/put", (req, res) => {
+  console.log("================================");
+  console.log(req.body.message);
+  console.log("================================");
   return res.json({ data: "PUT request" });
 });
 
