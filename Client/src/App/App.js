@@ -10,7 +10,7 @@ export default class extends Component {
   };
 
   getRequest = req => {
-    fetch("http://localhost:3001/api/get")
+    fetch("http://localhost:3000/users")
       .then(data => data.json())
       .then(res => this.setState({ data: res.data }));
   };
