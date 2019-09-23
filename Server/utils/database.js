@@ -7,11 +7,13 @@ const db = mysql.createConnection({
   database: "sql7305427"
 });
 
-db.connect(err => {
-  if (err) {
-    throw err;
-  }
-  console.log("Connected to database");
-});
+db.connection = function() {
+  this.connect(err => {
+    if (err) {
+      throw err;
+    }
+    console.log("Connected to database");
+  });
+};
 
 export default db;

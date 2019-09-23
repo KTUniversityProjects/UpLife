@@ -1,12 +1,12 @@
 /*TODO: Validation*/
-let Model = function(user) {
-  this.id = user.id;
-  this.username = user.username;
-  this.name = user.name;
-  this.lastname = user.lastname;
-  this.email = user.email;
-  this.score = user.score;
-  this.password = user.password;
+let Model = function(model) {
+  this.id = model.id;
+  this.username = model.modelname;
+  this.name = model.name;
+  this.lastname = model.lastname;
+  this.email = model.email;
+  this.score = model.score;
+  this.password = model.password;
 };
 
 export default Model;

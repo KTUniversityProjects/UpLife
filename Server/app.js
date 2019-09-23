@@ -1,30 +1,32 @@
 /*TODO:
-1. Import ALL routers from routes
-2. user ALL routers from routes
 3. Fix CORS
-4. Fix unhandled routes
 */
 
 import express from "express";
 import { json, urlencoded } from "body-parser";
+import db from "./utils/database";
 import cors from "cors";
-
-import userRouter from "./src/routes";
+import routes from "./src/routes";
 
 //Routes here
 const app = express();
-
-//app.use(cors);
+//Make db connection
+db.connection();
+//app.use(cors); ///FIX CORS
 app.use(urlencoded({ extended: true }));
 app.use(json());
-app.use("/api/user/", userRouter);
-// catch 400
+//Define routes
+app.use("/api/user/", routes.userRouter);
+app.use("/api/category/", routes.categoryRouter);
+app.use("/api/diary/", routes.diaryRouter);
+app.use("/api/habit/", routes.habitRouter);
+app.use("/api/habitTime/", routes.habitTimeRouter);
+app.use("/api/record/", routes.recordRouter);
+app.use("/api/routine/", routes.routineRouter);
+app.use("/api/session/", routes.sessionRouter);
 app.use((req, res, next) => {
-  res.status(400).send(`Error: ${res.originUrl} not found`);
-  next(err);
+  res.status(400).send(`Error: ${res.originUrl} not found. BAD ROUTE.`);
 });
-
-// catch 500
 app.use((err, req, res, next) => {
   res.status(500).send(`Error: ${err}`);
   next();
