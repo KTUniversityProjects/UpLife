@@ -8,11 +8,9 @@ import db from "./utils/database";
 import cors from "cors";
 import routes from "./src/routes";
 
-//Routes here
 const app = express();
-//Make db connection
 db.connection();
-//app.use(cors); ///FIX CORS
+app.options("*", cors());
 app.use(urlencoded({ extended: true }));
 app.use(json());
 //Define routes
