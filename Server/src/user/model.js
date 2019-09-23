@@ -1,3 +1,4 @@
+/*TODO: Validation*/
 let Model = function(user) {
   this.id = user.id;
   this.username = user.username;
