@@ -10,7 +10,7 @@ import routes from "./src/routes";
 
 const app = express();
 db.connection();
-app.options("*", cors());
+app.use(cors({ credentials: true, origin: true }));
 app.use(urlencoded({ extended: true }));
 app.use(json());
 //Define routes

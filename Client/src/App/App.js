@@ -10,15 +10,19 @@ export default class extends Component {
   };
 
   getRequest = req => {
-    fetch("http://localhost:3000/users")
+    fetch("http://localhost:3000/api/user/")
       .then(data => data.json())
       .then(res => this.setState({ data: res.data }));
   };
 
   postRequest = req => {
     axios
-      .post("http://localhost:3001/api/" + req, {
-        message: "HI FROM " + req
+      .post("http://localhost:3001/api/user/", {
+        email: "lol",
+        lastname: "aaa",
+        name: "aaa",
+        password: "hashed",
+        username: "bb"
       })
       .then(res => this.processReq(res, req));
   };
@@ -26,7 +30,7 @@ export default class extends Component {
   deleteRequest = req => {
     console.log(req);
     axios
-      .delete("http://localhost:3001/api/" + req + "/HIFROMDELETE")
+      .delete("http://localhost:3001/api/user/" + "HIFROMDELETE")
       .then(res => this.processReq(res, req));
   };
 
@@ -52,6 +56,8 @@ export default class extends Component {
         <button onClick={() => this.postRequest("put")}>PUT</button>
         {this.state.putResponse}
         <br />
+
+        <h1>Hello from Client app !</h1>
       </div>
     );
   }
