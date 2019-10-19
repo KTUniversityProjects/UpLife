@@ -34,17 +34,18 @@ db.getAll = (tableName, Model) => {
 
 db.create = (tableName, values, Model) => {
   return (req, res) => {
-    let object = new Model(req.body);
-    let insertInto = values.join(",");
+    const object = new Model(req.body);
+    const insertInto = values.join(",");
     values.forEach(function(value, index) {
       this[index] = object[value];
     }, values);
-    let placeholders = values.map(val => "?").join(",");
-    let query = `INSERT INTO ${tableName} (${insertInto}) VALUES (${placeholders})`;
+    const placeholders = values.map(val => "?").join(",");
+    const query = `INSERT INTO ${tableName} (${insertInto}) VALUES (${placeholders})`;
+    console.log("QUERY:", query);
     db.query(query, values, err => {
       if (err) {
-        handleError(err, res);
-      } else res.send(`${tableName} inserted successfuly`);
+        return handleError(err, res);
+      } else return res.send(`${tableName} inserted successfuly`);
     });
   };
 };
