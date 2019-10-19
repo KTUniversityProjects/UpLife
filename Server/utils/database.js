@@ -66,20 +66,51 @@ db.get = (tableName, Model) => {
 
 db.update = (tableName, values, Model) => {
   return (req, res) => {
-    let object = new Model(req.body);
-    let objectValues = [];
-    values.forEach(function(value, index) {
-      objectValues.push(object[value]);
-      this[index] = `${value} = ?`;
-    }, values);
-    values = values.join(",");
-    let query = `UPDATE ${tableName} SET ${values} WHERE id = ${req.params.id}`;
-
-    db.query(query, objectValues, err => {
-      if (err) {
-        handleError(err, res);
-      } else res.send(`${tableName} updated successfuly`);
-    });
+    let exit = 0;
+    const id = req.params.id;
+    db.query(
+      `SELECT * FROM ${tableName} WHERE id = ?`,
+      [id],
+      (err, currentRow) => {
+        if (err) {
+          handleError(err, res);
+        } else {
+          currentRow =
+            currentRow === undefined || currentRow.length == 0
+              ? {}
+              : new Model(currentRow[0]);
+          console.log(currentRow);
+          const currentModel =
+            currentRow === undefined || currentRow.length == 0
+              ? {}
+              : new Model(currentRow);
+          console.log(currentModel);
+          Object.keys(req.body).forEach(key => {
+            if (key in currentModel) {
+              currentModel[key] = req.body[key];
+            } else {
+              handleError(new Error("Tried to update undefined property"), res);
+              exit = 1;
+            }
+          });
+          if (exit == 1) {
+            return;
+          }
+          let objectValues = [];
+          values.forEach(function(value, index) {
+            objectValues.push(currentModel[value]);
+            this[index] = `${value} = ?`;
+          }, values);
+          values = values.join(",");
+          const query = `UPDATE ${tableName} SET ${values} WHERE id = ${id}`;
+          db.query(query, objectValues, err => {
+            if (err) {
+              handleError(err, res);
+            } else res.send(`${tableName} updated successfuly`);
+          });
+        }
+      }
+    );
   };
 };
 

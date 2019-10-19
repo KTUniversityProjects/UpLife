@@ -4,6 +4,7 @@ let Model = function(model) {
   this.id = model.id;
   this.day = model.day;
   this.text = model.text;
+  this.user_id = model.user_id;
 };
 
 let tableName = "diary";
