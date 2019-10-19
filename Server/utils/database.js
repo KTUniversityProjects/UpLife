@@ -32,16 +32,16 @@ db.getAll = (tableName, Model) => {
   };
 };
 
-db.create = (tableName, values, Model) => {
+db.create = (tableName, valuesArr, Model) => {
   return (req, res) => {
     const object = new Model(req.body);
-    const insertInto = values.join(",");
-    values.forEach(function(value, index) {
+    const insertInto = valuesArr.join(",");
+    const values = [];
+    valuesArr.forEach(function(value, index) {
       this[index] = object[value];
     }, values);
-    const placeholders = values.map(val => "?").join(",");
+    const placeholders = valuesArr.map(val => "?").join(",");
     const query = `INSERT INTO ${tableName} (${insertInto}) VALUES (${placeholders})`;
-    console.log("QUERY:", query);
     db.query(query, values, err => {
       if (err) {
         return handleError(err, res);
@@ -92,12 +92,12 @@ db.update = (tableName, values, Model) => {
             return;
           }
           let objectValues = [];
+          let setValues = [];
           values.forEach(function(value, index) {
             objectValues.push(currentModel[value]);
             this[index] = `${value} = ?`;
-          }, values);
-          values = values.join(",");
-          const query = `UPDATE ${tableName} SET ${values} WHERE id = ${id}`;
+          }, setValues);
+          const query = `UPDATE ${tableName} SET ${setValues} WHERE id = ${id}`;
           db.query(query, objectValues, err => {
             if (err) {
               handleError(err, res);
