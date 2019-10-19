@@ -28,7 +28,6 @@ export default class extends Component {
   };
 
   deleteRequest = req => {
-    console.log(req);
     axios
       .delete("http://localhost:3001/api/user/" + "HIFROMDELETE")
       .then(res => this.processReq(res, req));

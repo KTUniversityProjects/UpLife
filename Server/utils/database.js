@@ -1,5 +1,5 @@
 import mysql from "mysql";
-import handleError from "./utils";
+import { handleError } from "./utils";
 
 const db = mysql.createConnection({
   host: "remotemysql.com",
@@ -17,7 +17,7 @@ db.connection = function() {
   });
 };
 
-db.getAll = tableName => {
+db.getAll = (tableName, Model) => {
   return (req, res) => {
     db.query(`SELECT * FROM ${tableName}`, (err, rows) => {
       if (err) handleError(err, res);
@@ -94,7 +94,7 @@ db.remove = tableName => {
 };
 
 db.createControllerMethods = (tableName, Model, createValues, updateValues) => {
-  const getAll = db.getAll(tableName);
+  const getAll = db.getAll(tableName, Model);
   const create = db.create(tableName, createValues, Model);
   const get = db.get(tableName, Model);
   const update = db.update(tableName, updateValues, Model);
