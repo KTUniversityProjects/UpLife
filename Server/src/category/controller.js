@@ -20,7 +20,7 @@ const getAll = (req, res) => {
 const create = (req, res) => {
   let object = new Model(req.body);
   db.query(
-    `INSERT INTO ${tableName} (name,habit_id) VALUES (?,?)`,
+    `INSERT INTO ${tableName} (name,habit_id) VALUES (?,?)`, //TODO: Remove habit_id after DB update
     [object.name, object.habit_id],
     err => {
       if (err) {

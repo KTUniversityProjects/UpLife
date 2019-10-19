@@ -23,10 +23,10 @@ app.use("/api/record/", routes.recordRouter);
 app.use("/api/routine/", routes.routineRouter);
 app.use("/api/session/", routes.sessionRouter);
 app.use((req, res, next) => {
-  res.status(400).send(`Error: ${res.originUrl} not found. BAD ROUTE.`);
+  res.status(400).send(`Error: ${res.originUrl} not found. Bad route.`);
 });
 app.use((err, req, res, next) => {
-  res.status(500).send(`Error: ${err}`);
+  res.status(500).send(`Internal server error: ${err}`);
   next();
 });
 
