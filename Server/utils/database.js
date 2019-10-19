@@ -66,8 +66,8 @@ db.get = (tableName, Model) => {
 
 db.update = (tableName, values, Model) => {
   return (req, res) => {
-    let exit = 0;
     const id = req.params.id;
+    let exit = 0;
     db.query(
       `SELECT * FROM ${tableName} WHERE id = ?`,
       [id],
@@ -75,16 +75,10 @@ db.update = (tableName, values, Model) => {
         if (err) {
           handleError(err, res);
         } else {
-          currentRow =
+          let currentModel =
             currentRow === undefined || currentRow.length == 0
               ? {}
               : new Model(currentRow[0]);
-          console.log(currentRow);
-          const currentModel =
-            currentRow === undefined || currentRow.length == 0
-              ? {}
-              : new Model(currentRow);
-          console.log(currentModel);
           Object.keys(req.body).forEach(key => {
             if (key in currentModel) {
               currentModel[key] = req.body[key];
