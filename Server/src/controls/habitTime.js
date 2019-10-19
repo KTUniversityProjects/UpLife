@@ -6,16 +6,11 @@ let Model = function(model) {
   this.starttime = model.starttime;
 };
 
-export default Model;
+let tableName = "habit_time";
 
-  
-  let tableName = "habit_time";
-
-  export default db.createControllerMethods(
-    tableName,
-    Model,
-    ["endtime", "starttime", "habit_id", "routine_id"],
-    ["endtime", "starttime", "habit_id", "routine_id"]
-  );
-  
-  
+export default db.createControllerMethods(
+  tableName,
+  Model,
+  ["endtime", "starttime", "habit_id", "routine_id"],
+  ["endtime", "starttime", "habit_id", "routine_id"]
+);
