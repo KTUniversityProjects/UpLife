@@ -1,17 +1,12 @@
-/*TODO:
-1. Import all controllers
-2. Create all routes
-3. Export all routes
-*/
 import Routes from "../utils/routes";
-import userController from "./user/controller";
-import categoryController from "./category/controller";
-import diaryController from "./diary/controller";
-import habitController from "./habit/controller";
-import habitTimeController from "./habitTime/controller";
-import recordController from "./record/controller";
-import routineController from "./routine/controller";
-import sessionController from "./session/controller";
+import userController from "./controls/user";
+import categoryController from "./controls/category";
+import diaryController from "./controls/diary";
+import habitController from "./controls/habit";
+import habitTimeController from "./controls/habitTime";
+import recordController from "./controls/record";
+import routineController from "./controls/routine";
+import sessionController from "./controls/session";
 const routes = {
   userRouter: Routes(userController),
   categoryRouter: Routes(categoryController),

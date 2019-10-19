@@ -1,5 +1,4 @@
 import { Router } from "express";
-//TEST ALL CALLS, CHEKC IF ERRORS ARE PROVIDED FOR NON-EXISTING ROUTES
 
 function createRouter(controller) {
   const router = Router();
