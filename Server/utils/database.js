@@ -1,10 +1,10 @@
 import mysql from "mysql";
 
 const db = mysql.createConnection({
-  host: "sql7.freemysqlhosting.net",
-  user: "sql7305427",
-  password: "K9iwAy6vyT",
-  database: "sql7305427"
+  host: "remotemysql.com",
+  user: "ekjA9vCRo2",
+  password: "CpTfZ8ck8Y",
+  database: "ekjA9vCRo2"
 });
 
 db.connection = function() {
