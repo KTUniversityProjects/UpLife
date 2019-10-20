@@ -1,11 +1,11 @@
+require("dotenv").config();
 import mysql from "mysql";
 import { handleError } from "./utils";
-
 const db = mysql.createConnection({
-  host: "remotemysql.com",
-  user: "ekjA9vCRo2",
-  password: "CpTfZ8ck8Y",
-  database: "ekjA9vCRo2"
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE
 });
 
 db.connection = function() {
@@ -127,5 +127,26 @@ db.createControllerMethods = (tableName, Model, createValues, updateValues) => {
   const remove = db.remove(tableName);
   return { getAll, get, create, update, remove };
 };
+
+db.checkIfUserExists = async function(username) {
+  let result = null;
+  const query = new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM user WHERE username = ?`,
+      [username],
+      (err, rows) => {
+        if (err) reject();
+        else {
+          result = rows.length > 0 ? true : false;
+          resolve();
+        }
+      }
+    );
+  });
+  await query;
+  return result;
+};
+
+//TODO: addUser, getSession, getUserID
 
 export default db;

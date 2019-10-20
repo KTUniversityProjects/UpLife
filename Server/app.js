@@ -1,7 +1,3 @@
-/*TODO:
-3. Fix CORS
-*/
-
 import express from "express";
 import { json, urlencoded } from "body-parser";
 import db from "./utils/database";
@@ -14,14 +10,20 @@ app.use(cors({ credentials: true, origin: true }));
 app.use(urlencoded({ extended: true }));
 app.use(json());
 //Define routes
-app.use("/api/user/", routes.userRouter);
-app.use("/api/category/", routes.categoryRouter);
-app.use("/api/diary/", routes.diaryRouter);
-app.use("/api/habit/", routes.habitRouter);
-app.use("/api/habitTime/", routes.habitTimeRouter);
-app.use("/api/record/", routes.recordRouter);
-app.use("/api/routine/", routes.routineRouter);
-app.use("/api/session/", routes.sessionRouter);
+//TODO:
+//--> Add middleware to check HTTP header for the right accessToken.
+//--> Check db.js
+//--> Check fbOAuth.js
+//--> Setup client side with login and logout + headers for requests.
+app.use("/user/", routes.userRouter);
+app.use("/category/", routes.categoryRouter);
+app.use("/diary/", routes.diaryRouter);
+app.use("/habit/", routes.habitRouter);
+app.use("/habitTime/", routes.habitTimeRouter);
+app.use("/record/", routes.recordRouter);
+app.use("/routine/", routes.routineRouter);
+app.use("/session/", routes.sessionRouter);
+app.use(routes.loginRouter);
 app.use((req, res, next) => {
   res.status(400).send(`Error: ${res.originUrl} not found. Bad route.`);
 });
