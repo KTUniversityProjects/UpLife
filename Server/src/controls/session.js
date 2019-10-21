@@ -3,7 +3,7 @@ import { getCurrentTimestamp } from "../../utils/utils";
 
 let Model = function(model) {
   this.id = model.id;
-  this.userid = model.userid;
+  this.user_id = model.user_id;
   this.date = getCurrentTimestamp();
   this.access_token = model.access_token;
 };
@@ -23,11 +23,13 @@ sessionInsideController.addSession = async function(sessionInfo) {
   let session = new Model(sessionInfo);
   const query = new Promise((resolve, reject) => {
     db.query(
-      `INSERT INTO user (access_token, user_id) VALUES (?,?,?)`,
-      [session.accessToken, session.user_id],
+      `INSERT INTO session (access_token, user_id) VALUES (?,?)`,
+      [session.access_token, session.user_id],
       (err, rows) => {
-        if (err) reject();
-        else {
+        if (err) {
+          throw new Error(err);
+          reject();
+        } else {
           resolve();
           result = true;
         }
@@ -45,8 +47,10 @@ sessionInsideController.removeAccessToken = async function(userID) {
       `SELECT * FROM session WHERE user_id = ?`,
       [userID],
       (err, rows) => {
-        if (err) reject();
-        else {
+        if (err) {
+          throw new Error(err);
+          reject();
+        } else {
           resolve();
           doesExist = true;
         }
@@ -60,8 +64,10 @@ sessionInsideController.removeAccessToken = async function(userID) {
         `DELETE FROM session WHERE user_id = ?`,
         [userID],
         (err, rows) => {
-          if (err) reject();
-          else resolve();
+          if (err) {
+            throw new Error(err);
+            reject();
+          } else resolve();
         }
       );
     });

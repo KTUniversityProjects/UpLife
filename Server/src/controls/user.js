@@ -54,13 +54,42 @@ userInsideController.addUser = async function(userInfo) {
   let user = new Model(userInfo);
   const query = new Promise((resolve, reject) => {
     db.query(
-      `INSERT INTO user (username, name, lastname) VALUES (?,?,?)`,
-      [user.username, user.name, user.lastname],
+      `INSERT INTO user (created_at, updated_at, username, name, lastname) VALUES (?,?,?,?,?)`,
+      [
+        user.created_at,
+        user.updated_at,
+        user.username,
+        user.name,
+        user.lastname
+      ],
       (err, rows) => {
-        if (err) reject();
-        else {
+        if (err) {
+          console.log(err);
+          reject();
+        } else {
           resolve();
           result = true;
+        }
+      }
+    );
+  });
+  await query;
+  return result;
+};
+
+userInsideController.getUserID = async function(username) {
+  let result = null;
+  const query = new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM user WHERE username = ?`,
+      [username],
+      (err, rows) => {
+        if (err) {
+          console.log(err);
+          reject();
+        } else {
+          resolve();
+          result = rows[0].id;
         }
       }
     );

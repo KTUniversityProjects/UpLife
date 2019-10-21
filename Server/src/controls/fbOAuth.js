@@ -22,19 +22,17 @@ router.get(facebookAuthentication.callbackPath, async (req, res, next) => {
       accessToken,
       profile
     } = await facebookAuthentication.completeAuthentication(req, res);
-
-    let username = profile.name.givenName + profile.name.familyName;
-
+    let username = profile.id;
     const ifExists = await userInsideController.checkIfUserExists(username);
     if (!ifExists)
       await userInsideController.addUser({
-        username: profile.id,
+        username: username,
         name: profile.name.givenName,
         lastname: profile.name.familyName
       });
     let userID = await userInsideController.getUserID(username);
     await sessionInsideController.removeAccessToken(userID);
-    sessionInsideController.addSession({
+    await sessionInsideController.addSession({
       access_token: accessToken,
       user_id: userID
     });
