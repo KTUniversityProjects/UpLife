@@ -2,12 +2,30 @@ import React, { Component } from "react";
 import axios from "axios";
 
 export default class extends Component {
-  // state = {
-  //   getResponse: null,
-  //   putResponse: null,
-  //   deleteResponse: null,
-  //   postResponse: null
-  // };
+  state = {
+    loggedIn: false
+  };
+
+  componentDidMount() {
+    let isToken = window.location.hash.split("=")[1];
+    const token = isToken ? isToken : null;
+    if (localStorage.getItem("token")) {
+      this.setState({
+        loggedIn: true
+      });
+    }
+    if (token != null) {
+      localStorage.setItem("token", token);
+      window.location.href = "http://localhost:8080";
+    }
+  }
+
+  logOut = () => {
+    localStorage.clear();
+    this.setState({
+      loggedIn: false
+    });
+  };
 
   // getRequest = req => {
   //   fetch("http://localhost:3000/api/user/")
@@ -15,50 +33,13 @@ export default class extends Component {
   //     .then(res => this.setState({ data: res.data }));
   // };
 
-  // postRequest = req => {
-  //   axios
-  //     .post("http://localhost:3001/api/user/", {
-  //       email: "lol",
-  //       lastname: "aaa",
-  //       name: "aaa",
-  //       password: "hashed",
-  //       username: "bb"
-  //     })
-  //     .then(res => this.processReq(res, req));
-  // };
-
-  // deleteRequest = req => {
-  //   axios
-  //     .delete("http://localhost:3001/api/user/" + "HIFROMDELETE")
-  //     .then(res => this.processReq(res, req));
-  // };
-
-  // processReq = (res, req) => {
-  //   let propName = req + "Response";
-  //   this.setState({
-  //     [propName]: res.data.data
-  //   });
-  // };
-
   render() {
-    return (
-      <div>
-        {/* <button onClick={() => this.getRequest("get")}>GET</button>
-        {this.state.data}
-        <br />
-        <button onClick={() => this.postRequest("post")}>POST</button>
-        {this.state.postResponse}
-        <br />
-        <button onClick={() => this.deleteRequest("delete")}>DELETE</button>
-        {this.state.deleteResponse}
-        <br />
-        <button onClick={() => this.postRequest("put")}>PUT</button>
-        {this.state.putResponse}
-        <br /> */}
-        <form action="http://localhost:3000/__/auth/facebook" method="post">
-          <button type="submit">Login with facebook</button>
-        </form>
-      </div>
+    const logIn = (
+      <form action="http://localhost:3000/__/auth/facebook" method="post">
+        <button type="submit">Login with facebook</button>
+      </form>
     );
+    const logOut = <button onClick={() => this.logOut()}>Logout</button>;
+    return <div>{this.state.loggedIn ? logOut : logIn}</div>;
   }
 }

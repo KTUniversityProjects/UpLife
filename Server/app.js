@@ -12,7 +12,6 @@ app.use(json());
 //Define routes
 //TODO:
 //--> Add middleware to check HTTP header for the right accessToken.
-//--> Check db.js
 //--> Check fbOAuth.js
 //--> Setup client side with login and logout + headers for requests.
 app.use("/user/", routes.userRouter);

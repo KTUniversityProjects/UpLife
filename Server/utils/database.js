@@ -128,25 +128,4 @@ db.createControllerMethods = (tableName, Model, createValues, updateValues) => {
   return { getAll, get, create, update, remove };
 };
 
-db.checkIfUserExists = async function(username) {
-  let result = null;
-  const query = new Promise((resolve, reject) => {
-    db.query(
-      `SELECT * FROM user WHERE username = ?`,
-      [username],
-      (err, rows) => {
-        if (err) reject();
-        else {
-          result = rows.length > 0 ? true : false;
-          resolve();
-        }
-      }
-    );
-  });
-  await query;
-  return result;
-};
-
-//TODO: addUser, getSession, getUserID
-
 export default db;

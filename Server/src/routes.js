@@ -1,14 +1,13 @@
 import Routes from "../utils/routes";
-import userController from "./controls/user";
+import { userController } from "./controls/user";
 import categoryController from "./controls/category";
 import diaryController from "./controls/diary";
 import habitController from "./controls/habit";
 import habitTimeController from "./controls/habitTime";
 import recordController from "./controls/record";
 import routineController from "./controls/routine";
-import sessionController from "./controls/session";
+import { sessionController } from "./controls/session";
 import loginController from "./controls/fbOAuth.js";
-
 const routes = {
   userRouter: Routes(userController),
   categoryRouter: Routes(categoryController),
