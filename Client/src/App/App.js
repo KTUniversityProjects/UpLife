@@ -27,6 +27,24 @@ export default class extends Component {
     });
   };
 
+  testRequest = () => {
+    fetch("http://localhost:3000/user/", {
+      method: "GET",
+      headers: {
+        authorization: "bearer " + localStorage.getItem("token")
+      }
+    })
+      .then(data => data.json())
+      .then(res => console.log(res));
+    // axios
+    //   .request({
+    //     url: '"http://localhost:3000/user"',
+    //     method: "get",
+    //     headers: { authorization: localStorage.getItem("token") }
+    //   })
+    //   .then(res => console.log(res));
+  };
+
   // getRequest = req => {
   //   fetch("http://localhost:3000/api/user/")
   //     .then(data => data.json())
@@ -39,7 +57,12 @@ export default class extends Component {
         <button type="submit">Login with facebook</button>
       </form>
     );
-    const logOut = <button onClick={() => this.logOut()}>Logout</button>;
+    const logOut = (
+      <div>
+        <button onClick={() => this.logOut()}>Logout</button>
+        <button onClick={() => this.testRequest()}>Trest request</button>
+      </div>
+    );
     return <div>{this.state.loggedIn ? logOut : logIn}</div>;
   }
 }
