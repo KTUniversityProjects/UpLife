@@ -73,7 +73,30 @@ userInsideController.addUser = async function(userInfo) {
       }
     );
   });
+  // const roleQuery = new Promise((resolve, reject) => {
+  //   db.query(
+  //     `INSERT INTO user_roles (user_id, role_id) VALUES ('1', '1');`,
+  //     [
+  //       user.created_at,
+  //       user.updated_at,
+  //       user.username,
+  //       user.name,
+  //       user.lastname
+  //     ],
+  //     (err, rows) => {
+  //       if (err) {
+  //         console.log(err);
+  //         reject();
+  //       } else {
+  //         console.log("Add user", rows);
+  //         resolve();
+  //         result = true;
+  //       }
+  //     }
+  //   );
+  // });
   await query;
+  //await roleQuery;
   return result;
 };
 
@@ -90,6 +113,27 @@ userInsideController.getUserID = async function(username) {
         } else {
           resolve();
           result = rows[0].id;
+        }
+      }
+    );
+  });
+  await query;
+  return result;
+};
+
+userInsideController.getUser = async function(username) {
+  let result = null;
+  const query = new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM user LEFT JOIN user_roles ON user.id = user_roles.user_id WHERE username = ?`,
+      [username],
+      (err, rows) => {
+        if (err) {
+          console.log(err);
+          reject();
+        } else {
+          resolve();
+          result = rows;
         }
       }
     );

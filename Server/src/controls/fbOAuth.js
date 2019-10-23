@@ -1,7 +1,6 @@
 require("dotenv").config();
 import { Router } from "express";
 import { userInsideController } from "../controls/user";
-import { sessionInsideController } from "../controls/session";
 const FacebookAuthentication = require("@authentication/facebook");
 const router = Router();
 
@@ -23,6 +22,7 @@ router.get(facebookAuthentication.callbackPath, async (req, res, next) => {
       profile
     } = await facebookAuthentication.completeAuthentication(req, res);
     let username = profile.id;
+    console.log("user id", username);
     const ifExists = await userInsideController.checkIfUserExists(username);
     if (!ifExists)
       await userInsideController.addUser({
@@ -30,12 +30,6 @@ router.get(facebookAuthentication.callbackPath, async (req, res, next) => {
         name: profile.name.givenName,
         lastname: profile.name.familyName
       });
-    let userID = await userInsideController.getUserID(username);
-    await sessionInsideController.removeAccessToken(userID);
-    await sessionInsideController.addSession({
-      access_token: accessToken,
-      user_id: userID
-    });
     res.redirect(
       307,
       `${process.env.CLIENT_URL}/?key=value#token=${accessToken}`

@@ -114,7 +114,9 @@ db.remove = tableName => {
     db.query(`DELETE FROM ${tableName} WHERE id = ${req.params.id}`, err => {
       if (err) {
         handleError(err, res);
-      } else res.send(`Record from ${tableName} deleted successfuly`);
+      } else {
+        res.send(`Record from ${tableName} deleted successfuly`);
+      }
     });
   };
 };
