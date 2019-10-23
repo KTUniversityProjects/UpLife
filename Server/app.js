@@ -12,8 +12,12 @@ app.use(cors({ credentials: true, origin: true }));
 app.use(urlencoded({ extended: true }));
 app.use(json());
 
-//refactor isadmin and isauthenticated. move to utils.
-//add checks ifEsxist on queries for proepr status
+/*TODO:
+ 1. Refactor isAuthenticated and isAdmin. 
+ 2. Move them out to seperate file and use from outside
+ 3. Refactor queries  - check affected rows and give appropriate response
+ 4. Try to refactor client from React to Vue.
+*/
 function isAuthenticated(req, res, next) {
   let getToken = req.header("authorization");
   if (getToken) {
@@ -69,6 +73,12 @@ async function isAdmin(req, res, next) {
     res.send("Unauthorized");
   }
 }
+
+function UnauthorizedResponse(err = "") {
+  if (err) res.setHeader(500, "Server error").end();
+  else res.setHeader;
+}
+///////////////////////////////////////////////////
 
 app.use("/user/", [isAuthenticated, isAdmin], routes.userRouter);
 app.use("/category/", isAuthenticated, routes.categoryRouter);
