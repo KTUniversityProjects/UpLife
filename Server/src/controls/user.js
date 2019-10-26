@@ -30,6 +30,7 @@ let userController = db.createControllerMethods(
 );
 
 let userInsideController = {};
+
 userInsideController.checkIfUserExists = async function(username) {
   let result = null;
   const query = new Promise((resolve, reject) => {

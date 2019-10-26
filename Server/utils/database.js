@@ -10,11 +10,14 @@ const db = mysql.createConnection({
 
 db.connection = function() {
   this.connect(err => {
-    if (err) {
-      throw err;
-    }
+    if (err) throw err;
     console.log("---Connected to database---");
   });
+};
+
+const empty = res => {
+  res.status(404);
+  res.send("The result of the request was empty.");
 };
 
 db.getAll = (tableName, Model) => {
@@ -26,7 +29,8 @@ db.getAll = (tableName, Model) => {
         rows.forEach(row => {
           items.push(new Model(row));
         });
-        res.send(items);
+        if (items.length != 0) res.send(items);
+        else empty(res);
       }
     });
   };
@@ -42,10 +46,14 @@ db.create = (tableName, valuesArr, Model) => {
     }, values);
     const placeholders = valuesArr.map(val => "?").join(",");
     const query = `INSERT INTO ${tableName} (${insertInto}) VALUES (${placeholders})`;
-    db.query(query, values, err => {
+    db.query(query, values, (err, rows) => {
       if (err) {
         return handleError(err, res);
-      } else return res.send(`${tableName} inserted successfuly`);
+      } else {
+        if (rows.afftectedRows != 0)
+          res.send(`${tableName} inserted successfuly`);
+        else empty(res);
+      }
     });
   };
 };
@@ -58,8 +66,9 @@ db.get = (tableName, Model) => {
         handleError(err, res);
       } else {
         let result =
-          row === undefined || row.length == 0 ? {} : new Model(row[0]);
-        res.send(result);
+          row === undefined || row.length == 0 ? [] : new Model(row[0]);
+        if (result.length == 0) empty(res);
+        else res.send(result);
       }
     });
   };
@@ -84,7 +93,8 @@ db.update = (tableName, values, Model) => {
             if (key in currentModel) {
               currentModel[key] = req.body[key];
             } else {
-              handleError(new Error("Tried to update undefined property"), res);
+              res.status(404);
+              res.send("Tried to update undefined property");
               exit = 1;
             }
           });
@@ -111,13 +121,18 @@ db.update = (tableName, values, Model) => {
 
 db.remove = tableName => {
   return (req, res) => {
-    db.query(`DELETE FROM ${tableName} WHERE id = ${req.params.id}`, err => {
-      if (err) {
-        handleError(err, res);
-      } else {
-        res.send(`Record from ${tableName} deleted successfuly`);
+    db.query(
+      `DELETE FROM ${tableName} WHERE id = ${req.params.id}`,
+      (err, rows) => {
+        if (err) {
+          handleError(err, res);
+        } else {
+          if (rows.affectedRows != 0)
+            res.send(`Record from ${tableName} deleted successfuly`);
+          else empty(res);
+        }
       }
-    });
+    );
   };
 };
 

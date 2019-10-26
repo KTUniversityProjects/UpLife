@@ -6,7 +6,7 @@ import habitController from "./controls/habit";
 import habitTimeController from "./controls/habitTime";
 import recordController from "./controls/record";
 import routineController from "./controls/routine";
-import loginController from "./controls/fbOAuth.js";
+import { router } from "./controls/fbOAuth.js";
 const routes = {
   userRouter: Routes(userController),
   categoryRouter: Routes(categoryController),
@@ -15,7 +15,7 @@ const routes = {
   habitTimeRouter: Routes(habitTimeController),
   recordRouter: Routes(recordController),
   routineRouter: Routes(routineController),
-  loginRouter: loginController
+  loginRouter: router
 };
 
 export default routes;

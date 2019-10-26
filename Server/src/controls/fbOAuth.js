@@ -1,6 +1,7 @@
 require("dotenv").config();
 import { Router } from "express";
 import { userInsideController } from "../controls/user";
+import https from "https";
 const FacebookAuthentication = require("@authentication/facebook");
 const router = Router();
 
@@ -39,4 +40,51 @@ router.get(facebookAuthentication.callbackPath, async (req, res, next) => {
   }
 });
 
-export default router;
+const authentication = {};
+
+authentication.isAuthenticated = (req, res, next) => {
+  let getToken;
+  if (req.header("authorization"))
+    getToken = req.header("authorization").split(" ")[1];
+  if (getToken) {
+    https
+      .get("https://graph.facebook.com/app?access_token=" + getToken, resp => {
+        let data = "";
+        resp.on("data", chunk => (data += chunk));
+        resp.on("end", () => {
+          if (data != "") {
+            https
+              .get(
+                "https://graph.facebook.com/me?fields=id&access_token=" +
+                  getToken,
+                resp => {
+                  let data = "";
+                  resp.on("data", chunk => (data += chunk));
+                  resp.on("end", () => {
+                    req.user_id = data;
+                    next();
+                  });
+                }
+              )
+              .on("error", err => Unaouthorized());
+          } else Unaouthorized();
+        });
+      })
+      .on("error", err => {
+        Unaouthorized();
+      });
+  } else Unaouthorized();
+
+  function Unaouthorized() {
+    res.status(404);
+    res.send("Unaouthorized");
+  }
+};
+
+authentication.isAdmin = async (req, res, next) => {
+  const user = await userInsideController.getUser(JSON.parse(req.user_id).id);
+  if (user[0].role_id == 2) next();
+  else res.status(404).send("Unauthorized");
+};
+
+export { router, authentication };
