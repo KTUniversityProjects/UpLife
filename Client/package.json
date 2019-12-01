@@ -1,86 +1,39 @@
 {
-  "name": "uplife",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "webpack-dev-server --env development --open",
-    "build": "webpack --env production",
-    "test": "echo \"Error: no test specified. Most likely ain't gonna be specified tho\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/benmandr/project_08_06.git"
-  },
-  "author": "BenMandr",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/benmandr/project_08_06/issues"
-  },
-  "homepage": "https://github.com/benmandr/project_08_06#readme",
-  "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "autoprefixer": "^9.6.1",
-    "babel-eslint": "^10.0.2",
-    "babel-loader": "^8.0.6",
-    "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^3.2.0",
-    "eslint": "^5.3.0",
-    "eslint-config-airbnb": "^17.1.1",
-    "eslint-config-prettier": "^6.0.0",
-    "eslint-loader": "^2.2.1",
-    "eslint-plugin-import": "^2.18.0",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-react": "^7.14.2",
-    "file-loader": "^4.1.0",
-    "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0",
-    "mini-css-extract-plugin": "^0.8.0",
-    "node-sass": "^4.12.0",
-    "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "postcss-loader": "^3.0.0",
-    "postcss-scss": "^2.0.0",
-    "prettier": "^1.18.2",
-    "react-hot-loader": "^4.12.10",
-    "sass-loader": "^7.1.0",
-    "style-loader": "^1.0.0",
-    "terser-webpack-plugin": "^1.4.1",
-    "webpack": "^4.39.1",
-    "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.7.2",
-    "webpack-merge": "^4.2.1"
-  },
+  "name": "Uplife",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "@babel/preset-react": "^7.0.0",
-    "axios": "^0.19.0",
-    "babel-plugin-react-css-modules": "^5.2.6",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "axios": "^0.18.0",
+    "bootstrap": "^4.3.1",
+    "lodash": "^4.17.11",
+    "node-sass": "^4.13.0",
+    "react": "^16.8.2",
+    "react-bootstrap": "^1.0.0-beta.5",
+    "react-bootstrap-sweetalert": "^4.4.1",
+    "react-date-countdown-timer": "^1.0.3",
+    "react-datepicker": "^2.5.0",
+    "react-dom": "^16.8.2",
+    "react-images-upload": "^1.2.6",
+    "react-router": "^3.2.1",
+    "react-router-bootstrap": "^0.23.3",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "2.1.5",
+    "react-star-ratings": "^2.3.0",
+    "validator": "^10.11.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
   },
   "browserslist": [
-    "last 2 versions",
-    "ie >= 10"
-  ],
-  "babel": {
-    "presets": [
-      "@babel/preset-env",
-      "@babel/preset-react"
-    ],
-    "plugins": [
-      "@babel/plugin-proposal-class-properties",
-      [
-        "react-css-modules",
-        {
-          "filetypes": {
-            ".scss": {
-              "syntax": "postcss-scss"
-            }
-          }
-        }
-      ]
-    ]
-  }
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
