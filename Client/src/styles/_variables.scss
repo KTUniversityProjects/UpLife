@@ -7,3 +7,9 @@ $gray: #bab2b5;
 $blue: #123c69;
 //Install monsteratt font
 //Change log
+
+//Overriden styles
+.jumbotron {
+  background-color: $containerColor;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}

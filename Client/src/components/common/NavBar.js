@@ -94,7 +94,7 @@ export default class NavBar extends React.Component {
           <Link to="/">
             <img
               alt=""
-              src="/Images/logo.png"
+              src="/Images/your-logo.png"
               width="100"
               height="100"
               className="d-inline-block align-top"
