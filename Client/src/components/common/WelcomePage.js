@@ -6,19 +6,22 @@ class WelcomePage extends React.Component {
     return (
       <Jumbotron>
         <Container fluid>
-          <div class="grid-container">
-            <div class="grid-right">
-              <h1>Welcome to BIDERIS</h1>
+          <div className="grid-container">
+            <div className="grid-container__text">
+              <h1 className="grid-container__text--title">
+                Upgrade your lifestyle today
+              </h1>
               <p>
-                The worlds #1 app - if Aruodas.lt and Tinder had a child, and
-                then would give it away to an orphanage, this would be it.
+                UpLife - a web application, which is meant to help you create a
+                better daily routine, get new habits or throw out bad ones out
+                of your life. Join now.
               </p>
             </div>
-            <div class="grid-left">
+            <div className="grid-container__image">
               <img
                 alt=""
                 src="/Images/your-logo-2.png"
-                className="titleImage"
+                className="landing-image"
               />
             </div>
           </div>

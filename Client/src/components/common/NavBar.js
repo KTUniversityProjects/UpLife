@@ -66,7 +66,7 @@ export default class NavBar extends React.Component {
         </LinkContainer>
         <LinkContainer to="/">
           <Nav.Link href="#">
-            <Button variant="outline-light" onClick={this.logOut} block>
+            <Button variant="outline-light" block onClick={this.logOut}>
               Log out
             </Button>
           </Nav.Link>
@@ -76,7 +76,7 @@ export default class NavBar extends React.Component {
 
     const guestLinks = (
       <form action="http://localhost:4000/__/auth/facebook" method="post">
-        <button class="loginBtn--facebook" type="submit" block>
+        <button className="loginBtn--facebook" type="submit">
           Login
         </button>
       </form>
