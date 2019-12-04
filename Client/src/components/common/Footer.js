@@ -1,6 +1,6 @@
 import React from "react";
 import "./Footer.scss";
-import IconText from "./IconText";
+import IconText from "../IconText/IconText";
 import {
   faFacebook,
   faGithub,

@@ -1,106 +1,82 @@
 import React from "react";
 import { Jumbotron, Container, Button } from "react-bootstrap";
-import Picture from "./Picture.js";
 import { makePostRequest, makeGetRequest } from "../../App/request";
 import imges from "../../mock_data/images.js";
 import SweetAlert from "react-bootstrap-sweetalert";
-
+import "./Dashboard.scss";
 class Dashboard extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      index: 0,
-      users: [],
-      imges: imges,
-      isLoading: false,
-      alert: null
-    };
-    this.onRatingClick = this.onRatingClick.bind(this);
-    this.onRatingClickPositive = this.onRatingClickPositive.bind(this);
-  }
+  state = {
+    habits: [
+      { title: "brush yo teeth", check: "false" },
+      { title: "brush yo ass", check: "true" },
+      { title: "brush yo pp", check: "false" },
+      { title: "brush yo eyes", check: "false" }
+    ]
+  };
+  // componentDidMount() {
+  //   // makeGetRequest("apartment/all").then(response => {
+  //   //   this.setState({
+  //   //     users: response
+  //   //   });
+  //   // });
+  // }
 
-  componentDidMount() {
-    makeGetRequest("apartment/all").then(response => {
-      this.setState({
-        users: response
-      });
-    });
-  }
+  // onRatingClickPositive() {
+  //   const getAlert = () => (
+  //     <SweetAlert
+  //       success
+  //       title="OPA LIKED!"
+  //       onConfirm={() => {
+  //         this.setState({ alert: null });
+  //       }}
+  //     />
+  //   );
+  //   makePostRequest(
+  //     "user/like/" +
+  //       sessionStorage.userID +
+  //       "/" +
+  //       this.state.users[this.state.index].id
+  //   ).then(() => {
+  //     this.setState({
+  //       alert: getAlert()
+  //     });
+  //   });
+  //   this.onRatingClick();
+  // }
 
-  onRatingClickPositive() {
-    const getAlert = () => (
-      <SweetAlert
-        success
-        title="OPA LIKED!"
-        onConfirm={() => {
-          this.setState({ alert: null });
-        }}
-      />
-    );
-    makePostRequest(
-      "user/like/" +
-        sessionStorage.userID +
-        "/" +
-        this.state.users[this.state.index].id
-    ).then(() => {
-      this.setState({
-        alert: getAlert()
-      });
-    });
-    this.onRatingClick();
-  }
-
-  onRatingClick() {
-    if (this.state.index === this.state.users.length - 1) {
-      this.setState({
-        index: 0
-      });
-    } else {
-      this.setState({
-        index: this.state.index + 1
-      });
+  createScheduleHeader() {
+    let schedule = [<p>Days/Habits</p>];
+    for (let index = 1; index <= 7; index++) {
+      schedule.push(<p>{index}</p>);
     }
+    return schedule;
+  }
+
+  getCurrentMonth() {
+    const date = new Date();
+    const day = date.getDay() + 1;
+    const month = date.toLocaleString("default", { month: "long" });
+    return `${month}, ${day}`;
   }
 
   render() {
-    let info = "";
-    if (this.state.users.length !== 0) {
-      info =
-        "Price: " +
-        this.state.users[this.state.index].price +
-        ", Name: " +
-        this.state.users[this.state.index].name +
-        ", City: " +
-        this.state.users[this.state.index].city;
-    }
     return (
-      <Jumbotron>
-        <Container fluid>
-          <h1>here are some lithuanian beauties for ya</h1>
-          <Picture imgPaths={this.state.imges.imges.imgPaths} info={info} />
-          <center>
-            <Button
-              variant="outline-success"
-              size="lg"
-              onClick={this.onRatingClickPositive}
-            >
-              <span role="img" aria-label="heart">
-                ❤️
-              </span>
-            </Button>
-            <Button
-              variant="outline-danger"
-              size="lg"
-              onClick={this.onRatingClick}
-            >
-              <span role="img" aria-label="thumbs-down">
-                👎
-              </span>
-            </Button>
-          </center>
-        </Container>
+      <>
+        <div className="dashboard">
+          <div className="dashboard__scheduler"></div>
+          <h3>This week's progress</h3>
+          <hr />
+          <h5>{this.getCurrentMonth()}</h5>
+          <div className="dashboard__scheduler__row--header">
+            {this.createScheduleHeader()}
+          </div>
+          {this.state.habits.map((habit, index) => (
+            <h1>habit</h1>
+          ))}
+          <div className="dashboard__diary"></div>
+        </div>
         {this.state.alert}
-      </Jumbotron>
+      </>
     );
   }
 }

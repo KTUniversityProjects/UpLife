@@ -7,7 +7,7 @@ import NotFound from "../components/NotFound/NotFound";
 import requireAuth from "./requireAuth";
 import Dashboard from "../components/Dashboard/Dashboard";
 import UsersWhoRented from "../components/UsersWhoRented/Users";
-import MyPosts from "../components/MyPosts/MyPosts";
+// import MyPosts from "../components/MyPosts/MyPosts";
 import MyAuctions from "../components/MyAuctions/MyAuctions";
 import ActiveAuctions from "../components/ActiveAuctions/ActiveAuctions";
 import ActiveAuction from "../components/ActiveAuction/ActiveAuction";
@@ -19,7 +19,7 @@ export default (
     {/*User routes*/}
     <Route path="/dashboard" component={requireAuth(Dashboard)} />
     <Route path="/userswhorented" component={requireAuth(UsersWhoRented)} />
-    <Route path="/myposts" component={requireAuth(MyPosts)} />
+    {/* <Route path="/myposts" component={requireAuth(MyPosts)} /> */}
     <Route path="/myauctions" component={requireAuth(MyAuctions)} />
     <Route path="/activeauctions" component={requireAuth(ActiveAuctions)} />
     <Route path="/activeauction" component={requireAuth(ActiveAuction)} />

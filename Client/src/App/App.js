@@ -7,10 +7,12 @@ class App extends Component {
     return (
       <>
         <div className="container">
-          <NavBar />
-          {this.props.children}
+          <div className="content-wrap">
+            <NavBar />
+            {this.props.children}
+          </div>
+          <Footer />
         </div>
-        <Footer />
       </>
     );
   }

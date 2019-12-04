@@ -10,10 +10,3 @@ $white: #f8f8ff;
 //Breakpoints
 $tablet: 767px;
 //Overriden styles
-.jumbotron {
-  background-color: $containerColor;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  height: calc(100vh - 192px - 16vh);
-  align-items: center;
-  display: flex;
-}

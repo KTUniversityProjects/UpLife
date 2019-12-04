@@ -1,0 +1,20 @@
+@import "styles/variables";
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  background-color: $containerColor;
+  padding: 10px;
+  border-radius: 2px;
+  &__scheduler__row--header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-top: 1px solid $black;
+    border-bottom: 1px solid $black;
+    p {
+      border-right: 1px solid $black;
+      margin: 0;
+    }
+  }
+}

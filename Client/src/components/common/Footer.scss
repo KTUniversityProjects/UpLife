@@ -1,12 +1,15 @@
 @import "styles/variables";
-
 .footer {
-  left: 0;
   bottom: 0;
   right: 0;
+  left: 0;
   width: 100%;
+  position: absolute;
+  height: 15rem;
   background-color: $black;
-  padding: 96px 24px;
+  padding: 20px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   .logo {
     max-width: 100%;
     object-fit: cover;
@@ -27,6 +30,7 @@
         flex-direction: column;
         justify-content: space-between;
         text-align: center;
+        padding-right: 10px;
       }
       &-info {
         grid-area: 1/3/2/4;
