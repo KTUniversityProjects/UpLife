@@ -9,15 +9,22 @@ export default class NavBar extends React.Component {
   };
 
   componentDidMount() {
-    let isToken = window.location.hash.split("=")[1];
-    const token = isToken ? isToken : null;
+    let tokens = window.location.hash
+      .replace("#token=", "")
+      .replace("#userId", "")
+      .split("=");
+    let isToken = tokens[0];
+    let isUserId = tokens[1];
+    const token = isToken || null;
+    const userId = isUserId || null;
     if (localStorage.getItem("token")) {
       this.setState({
         isLoggedIn: true
       });
     }
-    if (token != null) {
+    if (token && userId) {
       localStorage.setItem("token", token);
+      localStorage.setItem("userId", userId);
       window.location.href = "http://localhost:3000";
     }
   }

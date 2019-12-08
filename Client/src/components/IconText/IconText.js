@@ -10,7 +10,7 @@ const IconText = props => {
           <FontAwesomeIcon icon={props.icon} />
         </div>
         <div className="iconText__text">
-          <h4>{props.text}</h4>
+          <p>{props.text}</p>
         </div>
       </a>
     </div>

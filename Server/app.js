@@ -25,6 +25,7 @@ app.use((req, res, next) => {
   res.status(400).send(`Error: ${res.originUrl} not found. Bad route.`);
 });
 app.use((err, req, res, next) => {
+  console.log(err);
   res.status(500).send(`Internal server error: ${err}`);
   next();
 });

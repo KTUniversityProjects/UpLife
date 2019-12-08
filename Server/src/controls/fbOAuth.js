@@ -23,7 +23,6 @@ router.get(facebookAuthentication.callbackPath, async (req, res, next) => {
       profile
     } = await facebookAuthentication.completeAuthentication(req, res);
     let username = profile.id;
-    console.log("user id", username);
     const ifExists = await userInsideController.checkIfUserExists(username);
     if (!ifExists)
       await userInsideController.addUser({
@@ -31,9 +30,10 @@ router.get(facebookAuthentication.callbackPath, async (req, res, next) => {
         name: profile.name.givenName,
         lastname: profile.name.familyName
       });
+    const userId = await userInsideController.getUserID(username);
     res.redirect(
       307,
-      `${process.env.CLIENT_URL}/?key=value#token=${accessToken}`
+      `${process.env.CLIENT_URL}/?key=value#token=${accessToken}#userId=${userId}`
     );
   } catch (ex) {
     next(ex);
