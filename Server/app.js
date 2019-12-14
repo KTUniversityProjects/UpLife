@@ -9,11 +9,7 @@ db.connection();
 app.use(cors({ credentials: true, origin: true }));
 app.use(urlencoded({ extended: true }));
 app.use(json());
-app.use(
-  "/user/",
-  [authentication.isAuthenticated, authentication.isAdmin],
-  routes.userRouter
-);
+app.use("/user/", authentication.isAuthenticated, routes.userRouter);
 app.use("/category/", authentication.isAuthenticated, routes.categoryRouter);
 app.use("/diary/", authentication.isAuthenticated, routes.diaryRouter);
 app.use("/habit/", authentication.isAuthenticated, routes.habitRouter);

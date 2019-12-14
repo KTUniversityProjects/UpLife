@@ -120,6 +120,27 @@ db.update = (tableName, values, Model) => {
 };
 
 db.remove = tableName => {
+  if (tableName === "habit") {
+    return (req, res) => {
+      db.query(
+        `DELETE FROM record WHERE habit_id = ${req.params.id}`,
+        (err, rows) => {
+          db.query(
+            `DELETE FROM ${tableName} WHERE id = ${req.params.id}`,
+            (err, rows) => {
+              if (err) {
+                handleError(err, res);
+              } else {
+                if (rows.affectedRows != 0)
+                  res.send(`Record from ${tableName} deleted successfuly`);
+                else empty(res);
+              }
+            }
+          );
+        }
+      );
+    };
+  }
   return (req, res) => {
     db.query(
       `DELETE FROM ${tableName} WHERE id = ${req.params.id}`,
