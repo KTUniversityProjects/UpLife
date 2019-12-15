@@ -22,10 +22,10 @@ export default class Habits extends React.Component {
     const id = localStorage.getItem("userId");
     makeGetRequest("habit").then(response => {
       this.setState(state => {
-        state.habits = response.filter(habit => habit.user_id !== parseInt(id));
-        state.userHabits = response.filter(
-          habit => habit.user_id === parseInt(id)
-        );
+        state.habits =
+          response && response.filter(habit => habit.user_id !== parseInt(id));
+        state.userHabits =
+          response && response.filter(habit => habit.user_id === parseInt(id));
         state.alert = alert;
         return { ...state };
       });
@@ -124,22 +124,23 @@ export default class Habits extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.userHabits.map(item => {
-                  return (
-                    <tr key={item.id}>
-                      <td>{item.name}</td>
-                      <td>{item.description}</td>
-                      <td>
-                        <EditHabitModal
-                          name={item.name}
-                          desc={item.description}
-                          id={item.id}
-                          refresh={this.performDataFetch}
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
+                {this.state.userHabits &&
+                  this.state.userHabits.map(item => {
+                    return (
+                      <tr key={item.id}>
+                        <td>{item.name}</td>
+                        <td>{item.description}</td>
+                        <td>
+                          <EditHabitModal
+                            name={item.name}
+                            desc={item.description}
+                            id={item.id}
+                            refresh={this.performDataFetch}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </Table>
             <h6>
@@ -183,23 +184,24 @@ export default class Habits extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.habits.map(item => {
-                  return (
-                    <tr
-                      key={item.id}
-                      onClick={() =>
-                        this.addHabitFromTable.call(this, {
-                          id: item.id,
-                          name: item.name,
-                          desc: item.description
-                        })
-                      }
-                    >
-                      <td>{item.name}</td>
-                      <td>{item.description}</td>
-                    </tr>
-                  );
-                })}
+                {this.state.habits &&
+                  this.state.habits.map(item => {
+                    return (
+                      <tr
+                        key={item.id}
+                        onClick={() =>
+                          this.addHabitFromTable.call(this, {
+                            id: item.id,
+                            name: item.name,
+                            desc: item.description
+                          })
+                        }
+                      >
+                        <td>{item.name}</td>
+                        <td>{item.description}</td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </Table>
             <h6 className="habit_form">

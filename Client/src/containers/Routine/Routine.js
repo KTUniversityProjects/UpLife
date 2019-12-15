@@ -26,15 +26,17 @@ export default class Routine extends React.Component {
     makeGetRequest("habit").then(resHabit => {
       let habits = resHabit.filter(x => x.user_id === parseInt(id));
       makeGetRequest("habitTime", { IDUser: id }).then(res => {
-        res.forEach(t => {
-          t.starttime = parseInt(t.starttime.split("T")[1].split(":")[0]) + 2;
-          t.endtime = parseInt(t.endtime.split("T")[1].split(":")[0]) + 2;
-        });
-        res.forEach(time => {
-          habits.forEach(habit => {
-            if (time.habit_id === habit.id) time["name"] = habit.name;
+        if (res) {
+          res.forEach(t => {
+            t.starttime = parseInt(t.starttime.split("T")[1].split(":")[0]) + 2;
+            t.endtime = parseInt(t.endtime.split("T")[1].split(":")[0]) + 2;
           });
-        });
+          res.forEach(time => {
+            habits.forEach(habit => {
+              if (time.habit_id === habit.id) time["name"] = habit.name;
+            });
+          });
+        }
         this.setState({
           habits,
           times: res,
@@ -109,26 +111,27 @@ export default class Routine extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.times.map(item => {
-                  return (
-                    <tr key={item.id}>
-                      <td>{item.starttime}</td>
-                      <td>{item.endtime}</td>
-                      <td>{item.name}</td>
-                      <td>
-                        <EditTimeModal
-                          name={item.name}
-                          start={item.starttime}
-                          end={item.endtime}
-                          id={item.id}
-                          habit_id={item.habit_id}
-                          habits={this.state.habits}
-                          refresh={this.performDataFetch}
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
+                {this.state.times &&
+                  this.state.times.map(item => {
+                    return (
+                      <tr key={item.id}>
+                        <td>{item.starttime}</td>
+                        <td>{item.endtime}</td>
+                        <td>{item.name}</td>
+                        <td>
+                          <EditTimeModal
+                            name={item.name}
+                            start={item.starttime}
+                            end={item.endtime}
+                            id={item.id}
+                            habit_id={item.habit_id}
+                            habits={this.state.habits}
+                            refresh={this.performDataFetch}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </Table>
           </Container>

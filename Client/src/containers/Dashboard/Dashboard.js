@@ -21,7 +21,7 @@ export default class Dashboard extends React.Component {
     this.performDataFetch();
   }
 
-  performDataFetch() {
+  performDataFetch = () => {
     const id = localStorage.getItem("userId");
     makeGetRequest(`habit`).then(response => {
       let habits;
@@ -82,7 +82,6 @@ export default class Dashboard extends React.Component {
                 });
             }
           });
-          //Fetch diary
           makeGetRequest(`diary`).then(diaries => {
             let diaryRecord = "";
             let diaryId = null;
@@ -106,9 +105,9 @@ export default class Dashboard extends React.Component {
         });
       }
     });
-  }
+  };
 
-  onCheckboxChange(obj) {
+  onCheckboxChange = obj => {
     this.setState(state => {
       state.habits.forEach(habit => {
         if (habit.id === obj.habit_id)
@@ -134,6 +133,12 @@ export default class Dashboard extends React.Component {
         .format("D");
       if (day.length < 2) day = `0${day}`;
       let date = `${moment().year()}-${moment().month() + 1}-${day} 01:00:00`;
+      console.log({
+        user_id: localStorage.getItem("userId"),
+        check_mark: true,
+        habit_id: obj.habit_id,
+        date
+      });
       makePostRequest(`record`, {
         user_id: localStorage.getItem("userId"),
         check_mark: true,
@@ -141,9 +146,9 @@ export default class Dashboard extends React.Component {
         date
       });
     }
-  }
+  };
 
-  createScheduleRow(initialItem, header = false) {
+  createScheduleRow = (initialItem, header = false) => {
     const schedule = [
       <p key="uniqueOne">{header ? initialItem : initialItem.title}</p>
     ];
@@ -176,20 +181,20 @@ export default class Dashboard extends React.Component {
       }
     }
     return schedule;
-  }
+  };
 
-  getCurrentMonth() {
+  getCurrentMonth = () => {
     const date = new Date();
     const day = date.getDay() + 1;
     const month = date.toLocaleString("default", { month: "long" });
     return `${month}, ${day}`;
-  }
+  };
 
-  onDiaryChange(e) {
+  onDiaryChange = e => {
     this.setState({ diaryText: e });
-  }
+  };
 
-  onDiarySave() {
+  onDiarySave = () => {
     const getAlert = () => (
       <SweetAlert
         success
@@ -213,7 +218,7 @@ export default class Dashboard extends React.Component {
     }
     this.setState({ alert: getAlert() });
     this.performDataFetch();
-  }
+  };
 
   render() {
     return (
