@@ -19,9 +19,12 @@ const makePostRequest = (url, data) => {
     });
 };
 
-const makeGetRequest = url => {
+const makeGetRequest = (url, data) => {
   return axios
     .get(apiUrl + url, {
+      params: {
+        ...data
+      },
       headers: {
         authorization: `bearer ${localStorage.getItem("token")}`
       }

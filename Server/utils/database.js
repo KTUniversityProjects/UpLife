@@ -21,6 +21,24 @@ const empty = res => {
 };
 
 db.getAll = (tableName, Model) => {
+  if (tableName === "habit_time") {
+    return (req, res) => {
+      db.query(
+        `SELECT habit_time.id, habit_time.endtime, habit_time.starttime, habit.id as habit_id FROM habit_time INNER JOIN habit ON habit.id = habit_time.habit_id WHERE habit.user_id = ${req.query.IDUser}`,
+        (err, rows) => {
+          if (err) handleError(err, res);
+          else {
+            let items = [];
+            rows.forEach(row => {
+              items.push(new Model(row));
+            });
+            if (items.length != 0) res.send(items);
+            else empty(res);
+          }
+        }
+      );
+    };
+  }
   return (req, res) => {
     db.query(`SELECT * FROM ${tableName}`, (err, rows) => {
       if (err) handleError(err, res);

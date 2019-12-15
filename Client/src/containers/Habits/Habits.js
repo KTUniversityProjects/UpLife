@@ -18,7 +18,7 @@ export default class Habits extends React.Component {
     this.performDataFetch();
   }
 
-  performDataFetch = alert => {
+  performDataFetch = (alert = null) => {
     const id = localStorage.getItem("userId");
     makeGetRequest("habit").then(response => {
       this.setState(state => {
@@ -26,7 +26,7 @@ export default class Habits extends React.Component {
         state.userHabits = response.filter(
           habit => habit.user_id === parseInt(id)
         );
-        state.alert = alert ? alert : null;
+        state.alert = alert;
         return { ...state };
       });
     });

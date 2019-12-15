@@ -43,7 +43,7 @@ export default class Dashboard extends React.Component {
               );
               habitRecords.forEach(rec => {
                 let now = moment();
-                let input = moment(rec.date);
+                let input = moment(new Date(rec.date));
                 if (now.isoWeek() === input.isoWeek()) {
                   habitObj.checkMarks.push({
                     day: input.isoWeekday() - 1,
@@ -89,7 +89,7 @@ export default class Dashboard extends React.Component {
             if (diaries && diaries.length !== 0) {
               diaries.forEach(diary => {
                 let now = moment();
-                let input = moment(diary.day);
+                let input = moment(new Date(diary.day));
                 let isCurrDate = now.isoWeekday() === input.isoWeekday();
                 if (parseInt(diary.user_id) === parseInt(id) && isCurrDate) {
                   diaryRecord = diary.text;
@@ -133,8 +133,7 @@ export default class Dashboard extends React.Component {
         .day(day)
         .format("D");
       if (day.length < 2) day = `0${day}`;
-      let date = `${new moment().year()}-${new moment().month() +
-        1}-${day} 01:00:00`;
+      let date = `${moment().year()}-${moment().month() + 1}-${day} 01:00:00`;
       makePostRequest(`record`, {
         user_id: localStorage.getItem("userId"),
         check_mark: true,
@@ -145,7 +144,9 @@ export default class Dashboard extends React.Component {
   }
 
   createScheduleRow(initialItem, header = false) {
-    const schedule = [<p>{header ? initialItem : initialItem.title}</p>];
+    const schedule = [
+      <p key="uniqueOne">{header ? initialItem : initialItem.title}</p>
+    ];
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     for (let index = 0; index <= 6; index++) {
       if (header) {
@@ -154,8 +155,9 @@ export default class Dashboard extends React.Component {
         initialItem.checkMarks.forEach(check => {
           if (check.day === index && schedule.length <= 7) {
             schedule.push(
-              <p>
+              <p key={index}>
                 <input
+                  key={"checkbox-" + initialItem.id + "-" + index}
                   id={"checkbox-" + initialItem.id + "-" + index}
                   type="checkbox"
                   checked={check.checked}

@@ -1,55 +1,73 @@
 import React from "react";
-import { Table, Jumbotron, Container, Button, Form } from "react-bootstrap";
+import Moment from "moment";
+import { Table, Jumbotron, Container, Form, Button } from "react-bootstrap";
 import { makeGetRequest, makePostRequest } from "../../utils/request";
 import SweetAlert from "react-bootstrap-sweetalert";
-import EditRoutineModal from "./EditRoutineModal";
+import EditTimeModal from "./EditTimeModal";
+import TextFieldGroup from "../common/TextFieldGroup";
 import "./Routine.scss";
 
 export default class Routine extends React.Component {
   state = {
     habits: [],
-    userHabits: [],
+    times: [],
     alert: null,
-    habitName: "",
-    habitDesc: ""
+    start: "",
+    end: "",
+    habit: ""
   };
 
   componentDidMount() {
     this.performDataFetch();
   }
 
-  performDataFetch(alert) {
+  performDataFetch = (alert = null) => {
     const id = localStorage.getItem("userId");
-    makeGetRequest("habit").then(response => {
-      this.setState(state => {
-        state.habits = response.filter(habit => habit.user_id !== parseInt(id));
-        state.userHabits = response.filter(
-          habit => habit.user_id === parseInt(id)
-        );
-        state.alert = alert ? alert : null;
-        return { ...state };
+    makeGetRequest("habit").then(resHabit => {
+      let habits = resHabit.filter(x => x.user_id === parseInt(id));
+      makeGetRequest("habitTime", { IDUser: id }).then(res => {
+        res.forEach(t => {
+          t.starttime = parseInt(t.starttime.split("T")[1].split(":")[0]) + 2;
+          t.endtime = parseInt(t.endtime.split("T")[1].split(":")[0]) + 2;
+        });
+        res.forEach(time => {
+          habits.forEach(habit => {
+            if (time.habit_id === habit.id) time["name"] = habit.name;
+          });
+        });
+        this.setState({
+          habits,
+          times: res,
+          alert: alert
+        });
       });
     });
+  };
+
+  convertTime(time) {
+    let result = Moment(
+      new Date(
+        Moment()
+          .toDate()
+          .setHours(time)
+      )
+    ).format();
+    result = result.substring(0, result.length - 6);
+    return result;
   }
 
-  onInputChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  }
-
-  onHabitSave() {
+  onTimeSave = () => {
     const successAlert = () => (
       <SweetAlert
         success
-        title="Your habit has been added!"
+        title="Your time has been added!"
         onConfirm={() => {
           this.setState({ alert: null });
         }}
       />
     );
 
-    if (!this.state.habitName || !this.state.habitDesc) {
+    if (!this.state.start || !this.state.end) {
       const failAlert = () => (
         <SweetAlert
           warning
@@ -60,80 +78,51 @@ export default class Routine extends React.Component {
         />
       );
       this.setState({ alert: failAlert() });
-      return;
     }
 
-    makePostRequest(`habit`, {
-      user_id: localStorage.getItem("userId"),
-      name: this.state.habitName,
-      description: this.state.habitDesc
+    makePostRequest(`habitTime`, {
+      routine_id: 1,
+      starttime: this.convertTime(this.state.start),
+      endtime: this.convertTime(this.state.end),
+      habit_id: this.state.habit
     }).then(() => {
       this.performDataFetch(successAlert());
     });
-  }
-
-  addHabitFromTable(obj) {
-    const successAlert = () => (
-      <SweetAlert
-        success
-        title="Habit added!"
-        onConfirm={() => {
-          this.setState({
-            alert: null
-          });
-        }}
-      />
-    );
-    const infoAlert = () => (
-      <SweetAlert
-        info
-        showCancel={true}
-        showCloseButton={true}
-        cancelBtnBsStyle="danger"
-        title="Add this habit to list of your habits?"
-        onConfirm={() => {
-          makePostRequest(`habit`, {
-            user_id: localStorage.getItem("userId"),
-            name: obj.name,
-            description: obj.desc
-          }).then(() => {
-            this.performDataFetch(successAlert());
-          });
-        }}
-        onCancel={() => {
-          this.setState({ alert: null });
-        }}
-      />
-    );
-    this.setState({ alert: infoAlert() });
-  }
-
+  };
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
   render() {
     return (
       <Jumbotron>
         <div className="habits_container">
           <Container fluid>
             <center>
-              <h1>Your habits</h1>
+              <h1>Set up your daily routine</h1>
             </center>
             <Table bordered responsive striped hover>
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th colSpan="2">Description</th>
+                  <th>Start time</th>
+                  <th>End time</th>
+                  <th colSpan="2">Habit</th>
                 </tr>
               </thead>
               <tbody>
-                {this.state.userHabits.map(item => {
+                {this.state.times.map(item => {
                   return (
                     <tr key={item.id}>
+                      <td>{item.starttime}</td>
+                      <td>{item.endtime}</td>
                       <td>{item.name}</td>
-                      <td>{item.description}</td>
                       <td>
-                        <EditRoutineModal
+                        <EditTimeModal
                           name={item.name}
-                          desc={item.description}
+                          start={item.starttime}
+                          end={item.endtime}
                           id={item.id}
+                          habit_id={item.habit_id}
+                          habits={this.state.habits}
                           refresh={this.performDataFetch}
                         />
                       </td>
@@ -142,72 +131,42 @@ export default class Routine extends React.Component {
                 })}
               </tbody>
             </Table>
-            <h6>
-              <b>Add a new habit:</b>
-              <div className="habit_form">
-                <Form.Group controlId="exampleForm.ControlTextarea1">
-                  <Form.Label>Name of the habit</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={this.state.habitName}
-                    name="habitName"
-                    placeholder="Ex.: Morning showers.."
-                    onChange={e => this.onInputChange(e)}
-                  />
-                  <hr></hr>
-                  <Form.Label>Description</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="habitDesc"
-                    value={this.state.habitDesc}
-                    placeholder="Taking a shower every morning wakes you up and ..."
-                    onChange={e => this.onInputChange(e)}
-                  />
-                </Form.Group>
-                <hr></hr>
-                <Button onClick={() => this.onHabitSave()} variant="info" block>
-                  Add new habit
-                </Button>
-              </div>
-            </h6>
-          </Container>
-          <Container fluid>
-            <center>
-              <h1>All habits</h1>
-            </center>
-            <Table bordered responsive striped hover>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.habits.map(item => {
-                  return (
-                    <tr
-                      key={item.id}
-                      onClick={() =>
-                        this.addHabitFromTable.call(this, {
-                          id: item.id,
-                          name: item.name,
-                          desc: item.description
-                        })
-                      }
-                    >
-                      <td>{item.name}</td>
-                      <td>{item.description}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-            <h6 className="habit_form">
-              Want to add any of the habits above to your habits? Just press on
-              any of them!
-            </h6>
           </Container>
         </div>
+        <Form>
+          <TextFieldGroup
+            label="Start time"
+            onChange={e => this.onChange(e)}
+            value={this.state.start}
+            field="start"
+            type="number"
+          />
+          <hr></hr>
+          <TextFieldGroup
+            label="End time"
+            onChange={e => this.onChange(e)}
+            value={this.state.end}
+            field="end"
+            type="number"
+          />
+          <hr></hr>
+          <Form.Label>Select habit</Form.Label>
+          <Form.Control
+            as="select"
+            onChange={e => this.onChange(e)}
+            name="habit"
+            value={this.state.habit}
+          >
+            {this.state.habits.map(item => (
+              <option key={item.id} value={item.id}>
+                {item.name}
+              </option>
+            ))}
+          </Form.Control>
+          <Button onClick={() => this.onTimeSave()} variant="info" block>
+            Add new habit
+          </Button>
+        </Form>
         {this.state.alert}
       </Jumbotron>
     );
